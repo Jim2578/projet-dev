@@ -19,9 +19,21 @@ body {
   @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200;
 }
 
+/* pour limiter le texte a 5 lignes sur les cartes d'articles */
 .line-clamp-5 {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* essai d'animation sur les cartes, marche pas comme je voulais
+.card-hover {
+  transition: transform 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+}
+*/
+
+/* TODO: ajouter des animations pour les modales */

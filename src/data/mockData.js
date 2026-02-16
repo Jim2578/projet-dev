@@ -1,12 +1,4 @@
-// ============================================
-// MOCKDATA.JS - Les donnees de test (fake data)
-// Comme on fait pas de backend, on simule les donnees ici
-// En vrai ca viendrait d'une API/base de donnees
-// ============================================
-
-// ====== TAGS ======
-// Les categories pour les articles
-// Chaque tag a un id, un nom et une couleur Tailwind
+// les tags pour les articles
 export const TAGS = [
   { id: 1, name: 'React', color: 'bg-blue-500' },
   { id: 2, name: 'JavaScript', color: 'bg-yellow-500' },
@@ -16,22 +8,11 @@ export const TAGS = [
   { id: 6, name: 'Tutoriel', color: 'bg-purple-500' },
 ]
 
-// ====== EMOJIS ======
-// Les emojis disponibles pour les reactions
-// C'est un simple tableau de strings
+// les emojis pour les reactions
 export const EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🎉']
 
-// ====== POSTS ======
-// Les articles du blog
-// Structure d'un post:
-// - id: identifiant unique
-// - title: le titre de l'article
-// - content: le texte complet (avec des \n pour les retours a la ligne)
-// - author: nom de l'auteur
-// - authorId: id de l'auteur (pour savoir qui a ecrit)
-// - createdAt: date de creation en format ISO
-// - tags: tableau des IDs de tags
-// - reactions: objet { emoji: [userId1, userId2, ...] }
+// les articles du blog (fake data)
+// normalement ca viendrait d'une api mais on a pas de backend
 export const INITIAL_POSTS = [
   {
     id: 1,
@@ -48,11 +29,11 @@ Cette version marque une étape importante dans l'évolution de React, rendant l
     author: 'Admin',
     authorId: 1,
     createdAt: '2026-01-15T10:30:00Z',
-    tags: [1, 2], // React, JavaScript
+    tags: [1, 2],
     reactions: {
-      '👍': [2, 3], // Users 2 et 3 ont like
-      '❤️': [2],    // User 2 a mis un coeur
-      '🎉': [3],    // User 3 a mis une celebration
+      '👍': [2, 3],
+      '❤️': [2],
+      '🎉': [3],
     },
   },
   {
@@ -72,7 +53,7 @@ Cascade Layers (@layer) aide à organiser la spécificité CSS de manière prév
     author: 'Admin',
     authorId: 1,
     createdAt: '2026-01-20T14:00:00Z',
-    tags: [3, 6], // CSS, Tutoriel
+    tags: [3, 6],
     reactions: {
       '👍': [2],
       '😮': [3],
@@ -95,7 +76,7 @@ Enfin, nous ajouterons une gestion d'erreurs centralisée et du logging pour fac
     author: 'Admin',
     authorId: 1,
     createdAt: '2026-01-25T09:15:00Z',
-    tags: [4, 2, 6], // Node.js, JavaScript, Tutoriel
+    tags: [4, 2, 6],
     reactions: {
       '👍': [2, 3],
       '❤️': [2, 3],
@@ -119,7 +100,7 @@ Mapped Types transforment les propriétés d'un type existant, permettant de cr�
     author: 'Admin',
     authorId: 1,
     createdAt: '2026-01-28T16:45:00Z',
-    tags: [5, 6], // TypeScript, Tutoriel
+    tags: [5, 6],
     reactions: {
       '😮': [2],
       '👍': [3],
@@ -127,35 +108,26 @@ Mapped Types transforment les propriétés d'un type existant, permettant de cr�
   },
 ]
 
-// ====== COMMENTAIRES ======
-// Les commentaires des articles
-// Structure d'un commentaire:
-// - id: identifiant unique
-// - postId: l'id du post auquel appartient le commentaire
-// - userId: l'id de l'utilisateur qui a commente
-// - userName: le nom de l'utilisateur (denormalise pour simplifier)
-// - content: le texte du commentaire
-// - createdAt: date de creation
+// les commentaires
 export const INITIAL_COMMENTS = [
-  // Commentaires du post 1 (React 19)
+  // commentaires du post 1 (React 19)
   { id: 1, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'Super article ! React 19 a l\'air vraiment prometteur.', createdAt: '2026-01-15T12:00:00Z' },
   { id: 2, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Merci pour ces explications claires sur les nouvelles fonctionnalités.', createdAt: '2026-01-15T14:30:00Z' },
   { id: 3, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'J\'ai hâte de tester le nouveau compilateur !', createdAt: '2026-01-16T09:00:00Z' },
   { id: 4, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Les Server Components vont vraiment changer la donne.', createdAt: '2026-01-16T11:15:00Z' },
   { id: 5, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'Est-ce que la migration depuis React 18 est compliquée ?', createdAt: '2026-01-17T08:00:00Z' },
   { id: 6, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Je vais commencer à l\'utiliser sur mon prochain projet.', createdAt: '2026-01-17T15:45:00Z' },
-  // Commentaires du post 2 (CSS)
+  // commentaires du post 2 (CSS)
   { id: 7, postId: 2, userId: 2, userName: 'Jean Dupont', content: 'Container Queries, c\'est la révolution !', createdAt: '2026-01-20T16:00:00Z' },
   { id: 8, postId: 2, userId: 3, userName: 'Marie Martin', content: 'Enfin le nesting natif, plus besoin de Sass juste pour ça.', createdAt: '2026-01-21T10:00:00Z' },
-  // Commentaires du post 3 (Node.js)
+  // commentaires du post 3 (Node.js)
   { id: 9, postId: 3, userId: 3, userName: 'Marie Martin', content: 'Tutoriel très complet, merci !', createdAt: '2026-01-25T11:00:00Z' },
   { id: 10, postId: 3, userId: 2, userName: 'Jean Dupont', content: 'La partie sur JWT est exactement ce que je cherchais.', createdAt: '2026-01-26T14:00:00Z' },
-  // Commentaires du post 4 (TypeScript)
+  // commentaires du post 4 (TypeScript)
   { id: 11, postId: 4, userId: 2, userName: 'Jean Dupont', content: 'Les mapped types sont vraiment puissants.', createdAt: '2026-01-29T09:00:00Z' },
 ]
 
-// ====== AUTEUR ======
-// Les informations sur l'auteur du blog (pour la page A propos)
+// infos de l'auteur pour la page a propos
 export const AUTHOR_INFO = {
   name: 'Alexandre Durand',
   title: 'Développeur Full-Stack & Formateur',
@@ -166,15 +138,12 @@ Spécialisé dans l'écosystème JavaScript/TypeScript, je travaille quotidienne
 Mon objectif est de rendre le développement web accessible à tous, en expliquant les concepts complexes de manière simple et pratique.
 
 Quand je ne code pas, vous me trouverez probablement en train de lire des articles tech, de contribuer à des projets open source, ou de préparer mes prochains cours.`,
-  // Avatar genere par DiceBear (service gratuit d'avatars)
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alexandre',
-  // Liens vers les reseaux sociaux
   social: {
     github: 'https://github.com',
     linkedin: 'https://linkedin.com',
     twitter: 'https://twitter.com',
   },
-  // Quelques stats pour faire joli
   stats: {
     posts: 4,
     comments: 50,

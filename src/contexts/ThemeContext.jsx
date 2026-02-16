@@ -1,55 +1,48 @@
-// ============================================
-// THEMECONTEXT.JSX - Gestion du theme Dark/Light
-// Permet de switcher entre le mode sombre et le mode clair
-// Meme principe que AuthContext mais pour le theme
-// ============================================
-
 import { createContext, useContext, useState, useEffect } from 'react'
 
-// Creation du contexte pour le theme
+// contexte pour le dark mode
 const ThemeContext = createContext(null)
 
 export function ThemeProvider({ children }) {
-  // State pour savoir si on est en mode sombre ou pas
-  // Par defaut on met false (mode clair)
   const [isDark, setIsDark] = useState(false)
 
-  // useEffect pour charger la preference au demarrage
-  // Se lance une seule fois grace au tableau vide []
+  // au chargement, on check le localStorage ou la preference systeme
   useEffect(() => {
-    // On regarde si ya une preference sauvegardee
     const saved = localStorage.getItem('blogaura_theme')
     if (saved) {
-      // Si oui, on l'utilise
       setIsDark(saved === 'dark')
     } else {
-      // Sinon on regarde la preference systeme de l'utilisateur
-      // window.matchMedia permet de checker les media queries en JS
+      // on regarde si l'user prefere le dark mode sur son OS
       const prefereDark = window.matchMedia('(prefers-color-scheme: dark)').matches
       setIsDark(prefereDark)
     }
   }, [])
 
-  // useEffect pour appliquer le theme quand isDark change
+  // a chaque changement de theme on update le DOM et le localStorage
   useEffect(() => {
-    // document.documentElement c'est la balise <html>
-    const root = document.documentElement
     if (isDark) {
-      // En mode sombre, on ajoute la classe 'dark' au HTML
-      // Tailwind utilise cette classe pour appliquer les styles dark:
-      root.classList.add('dark')
+      document.documentElement.classList.add('dark')
     } else {
-      // En mode clair, on enleve la classe
-      root.classList.remove('dark')
+      document.documentElement.classList.remove('dark')
     }
-    // On sauvegarde la preference dans le localStorage
     localStorage.setItem('blogaura_theme', isDark ? 'dark' : 'light')
+    // console.log("theme:", isDark ? 'dark' : 'light')
   }, [isDark])
 
-  // Fonction pour changer le theme
+  // toggle le theme
   const toggleTheme = () => {
     setIsDark(!isDark)
   }
+
+  /* ancienne version avec un if
+  const toggleTheme = () => {
+    if (isDark) {
+      setIsDark(false)
+    } else {
+      setIsDark(true)
+    }
+  }
+  */
 
   return (
     <ThemeContext.Provider value={{ isDark, toggleTheme }}>
@@ -58,11 +51,10 @@ export function ThemeProvider({ children }) {
   )
 }
 
-// Hook pour utiliser le theme facilement dans les composants
 export function useTheme() {
   const context = useContext(ThemeContext)
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider')
+    throw new Error('useTheme doit etre utilise dans un ThemeProvider')
   }
   return context
 }

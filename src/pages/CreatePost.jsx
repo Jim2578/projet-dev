@@ -1,56 +1,61 @@
-// ============================================
-// CREATEPOST.JSX - Page de creation d'article
-// Formulaire pour creer un nouvel article (admin only)
-// Cette page est protegee par ProtectedRoute
-// ============================================
-
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { TAGS } from '../data/mockData' // Liste des tags disponibles
+import { TAGS } from '../data/mockData'
 
-// Props:
-// - onAddPost: fonction pour ajouter le post (vient de App.jsx)
 function CreatePost({ onAddPost }) {
-  // On recupere l'user pour mettre son nom en auteur
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  // States pour les champs du formulaire
-  const [title, setTitle] = useState('') // Le titre de l'article
-  const [content, setContent] = useState('') // Le contenu de l'article
-  const [selectedTags, setSelectedTags] = useState([]) // Les tags selectionnes (tableau d'IDs)
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [selectedTags, setSelectedTags] = useState([])
 
-  // Fonction pour toggle un tag (ajouter/retirer)
-  const handleTagToggle = (tagId) => {
+  // ajouter ou retirer un tag
+  function handleTagToggle(tagId) {
+    if (selectedTags.includes(tagId)) {
+      // le tag est deja la, on le retire
+      const newTags = selectedTags.filter(id => id !== tagId)
+      setSelectedTags(newTags)
+    } else {
+      // on ajoute le tag
+      setSelectedTags([...selectedTags, tagId])
+    }
+  }
+
+  /* version courte (meme chose):
+  function handleTagToggle(tagId) {
     setSelectedTags(prev =>
       prev.includes(tagId)
-        // Si le tag est deja selectionne, on le retire
         ? prev.filter(id => id !== tagId)
-        // Sinon on l'ajoute
         : [...prev, tagId]
     )
   }
+  */
 
-  // Fonction appelee quand on soumet le formulaire
-  const handleSubmit = (e) => {
-    e.preventDefault() // Empeche le rechargement de la page
+  // quand on publie l'article
+  function handleSubmit(e) {
+    e.preventDefault()
 
-    // On verifie que les champs sont pas vides
-    if (title.trim() && content.trim()) {
-      // On cree le nouveau post avec toutes les infos
-      onAddPost({
-        title: title.trim(),
-        content: content.trim(),
-        author: user.name, // Le nom de l'user connecte
-        authorId: user.id,
-        createdAt: new Date().toISOString(), // Date actuelle en format ISO
-        tags: selectedTags,
-        reactions: {}, // Pas de reactions au debut
-      })
-      // On redirige vers l'accueil
-      navigate('/')
+    // verif que c'est pas vide
+    if (!title.trim() || !content.trim()) {
+      // alert("Remplis le titre et le contenu !") // version moche mais ca marchait
+      return
     }
+
+    const nouveauPost = {
+      title: title.trim(),
+      content: content.trim(),
+      author: user.name,
+      authorId: user.id,
+      createdAt: new Date().toISOString(),
+      tags: selectedTags,
+      reactions: {} // vide au debut
+    }
+
+    onAddPost(nouveauPost)
+    console.log("article publié:", nouveauPost.title)
+    navigate('/') // retour a l'accueil
   }
 
   return (
@@ -61,7 +66,7 @@ function CreatePost({ onAddPost }) {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Champ titre */}
+          {/* titre */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Titre
@@ -76,23 +81,20 @@ function CreatePost({ onAddPost }) {
             />
           </div>
 
-          {/* Selection des tags */}
+          {/* selection des tags */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags
             </label>
-            {/* On affiche tous les tags comme des boutons cliquables */}
             <div className="flex flex-wrap gap-2">
               {TAGS.map(tag => (
                 <button
                   key={tag.id}
-                  type="button" // Important: type="button" pour pas soumettre le form
+                  type="button"
                   onClick={() => handleTagToggle(tag.id)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                     selectedTags.includes(tag.id)
-                      // Si selectionne: couleur du tag
                       ? `${tag.color} text-white`
-                      // Sinon: gris
                       : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   }`}
                 >
@@ -102,7 +104,7 @@ function CreatePost({ onAddPost }) {
             </div>
           </div>
 
-          {/* Zone de texte pour le contenu */}
+          {/* contenu */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Contenu
@@ -110,27 +112,25 @@ function CreatePost({ onAddPost }) {
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              rows={12} // Nombre de lignes visibles
+              rows={12}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
               placeholder="Écrivez votre article ici..."
               required
             />
           </div>
 
-          {/* Boutons d'action */}
+          {/* boutons */}
           <div className="flex gap-4">
-            {/* Bouton publier */}
             <button
               type="submit"
-              disabled={!title.trim() || !content.trim()} // Desactive si champs vides
+              disabled={!title.trim() || !content.trim()}
               className="flex-1 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Publier
             </button>
-            {/* Bouton annuler */}
             <button
               type="button"
-              onClick={() => navigate('/')} // Retour a l'accueil sans sauvegarder
+              onClick={() => navigate('/')}
               className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
             >
               Annuler
