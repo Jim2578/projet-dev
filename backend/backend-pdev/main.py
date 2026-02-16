@@ -1,57 +1,39 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
-class Student(BaseModel):
-    id: int
-    name: str
-    age: int
-student_db = [ 
-    { "id": 1, "name": "Anne", "age": 22 }, 
-    { "id": 2, "name": "Thomas", "age": 23 }, 
-    { "id": 3, "name": "Giorno Giovanna", "age": 16 }, 
-]
+from db import connect_db
+from routers.auth import router as auth_router
+from routers.users import router as users_router
+from routers.posts import router as posts_router
+from routers.comment import router as comment_router
+from routers.react import router as react_router
 
-app = FastAPI()
-app.add_middleware( CORSMiddleware, allow_origins=["http://localhost:5173"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"], )
+app = FastAPI() 
 
-# racine
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Sessions
+app.add_middleware(
+    SessionMiddleware,
+    secret_key="un-secret-long-et-random",
+)
+
+def LogOutUser():
+    return True
+# routes
 @app.get("/")
-def home(): 
-    return  { "message" : "API is running" }
-    
-# affiche tout les étudiants
-@app.get("/student")
-def students():
-    return student_db
-# affiche le nombre d'étudiants
-@app.get("/student/count")
-def Count_student():
-    return { "Amt_Student": len(student_db) }
-
-
-# ajoute un étudiant
-@app.post("/student")
-def create_student(student: Student):
-    student_db.append(student.dict())
-    return { "message": "Etudiant ajouté", "étudiant": student }
-
-
-# cherche un étudiant avec son id
-@app.get("/student/{id}")
-def get_student(id:int):
-    for student in student_db:
-        if(student["id"] == id):
-            return student
-    raise HTTPException(status_code=404, detail="Etudiant inexistant")
-
-# recherche un étudiant avec son nom
-@app.get("/student/search/{name}")
-def Search_by_name(name: str):
-    name = name.lower()
-    result = []
-    for student in student_db:
-        if(name in student["name"].lower()):
-            result.append(student)
-    if(result): return result
-    raise HTTPException(status_code=404, detail="Etudiant inexistant")
+def read_root():
+    return {"message": "API is running", "db_status": "connected" if connect_db() else "not connected", "version": "26.15.02"}
+app.include_router(auth_router, prefix="/auth") #routes pour l'authentification
+app.include_router(users_router, prefix="/users") #routes pour les utilisateurs (CRUD)
+app.include_router(posts_router, prefix="/posts") #routes pour les posts (CRUD)
+app.include_router(comment_router, prefix="/comments") #routes pour les commentaires (CRUD)
+app.include_router(react_router, prefix="/reacts") #routes pour les réactions (CRUD)
