@@ -6,19 +6,48 @@ router = APIRouter()
 def get_all_posts():
     conn = connect_db() 
     cursor = conn.cursor(dictionary=True) 
-    query = "SELECT id_post, title, text FROM post" 
+    query = "SELECT post.id_post, post.title, post.text, user.id_user, user.pseudo AS author_name " \
+            "FROM post JOIN user ON post.authorid = user.id_user" 
     cursor.execute(query) 
     result = cursor.fetchall() 
+
+    for post in result:
+        post_id = post['id_post']
+        query = "SELECT id_user, emoji FROM react where id_post = %s"
+        cursor.execute(query, (post_id,))
+        reactions_data = cursor.fetchall()
+        reactions = {}
+        for row in reactions_data:
+            emoji = row['emoji']
+            user_id = row['id_user']
+            if emoji not in reactions:
+                reactions[emoji] = []
+            reactions[emoji].append(user_id)
+        post['reactions'] = reactions
     cursor.close() 
     conn.close() 
     return result
 
 def get_post_by_id(post_id: int):
     conn = connect_db() 
-    cursor = conn.cursor(dictionary=True) 
-    query = "SELECT id_post, title, text FROM post WHERE id_post = %s" 
+    cursor = conn.cursor(dictionary=True)  
+    query = "SELECT post.id_post, post.title, post.text, user.id_user, user.pseudo AS author_name " \
+            "FROM post JOIN user ON post.authorid = user.id_user WHERE post.id_post = %s"
     cursor.execute(query, (post_id,)) 
-    result = cursor.fetchone() 
+    result = cursor.fetchone()
+
+    query = "SELECT id_user, emoji FROM react where id_post = %s"
+    cursor.execute(query, (post_id,))
+    reactions_data = cursor.fetchall()
+
+    reactions = {}
+    for row in reactions_data:
+        emoji = row['emoji']
+        user_id = row['id_user']
+        if emoji not in reactions:
+            reactions[emoji] = []
+        reactions[emoji].append(user_id)
+    result['reactions'] = reactions
     cursor.close() 
     conn.close() 
     return result
