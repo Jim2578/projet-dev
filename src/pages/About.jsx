@@ -1,5 +1,5 @@
 import { AUTHOR_INFO } from '../data/mockData'
-
+// à enlever: pas assez de temps pour l'implémenter avec le backend, on verra ça plus tard
 function About() {
   return (
     <div className="max-w-3xl mx-auto">

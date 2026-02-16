@@ -33,13 +33,12 @@ function Navbar() {
             >
               Accueil
             </Link>
-
-            <Link
+{/*         <Link
               to="/about"
               className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
               A propos
-            </Link>
+            </Link> */}
 
             {/* lien nouveau post visible que pour les admins */}
             {isAdmin && (

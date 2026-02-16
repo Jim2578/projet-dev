@@ -1,13 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { MOCK_USERS } from '../data/mockData'
 
 const AuthContext = createContext(null)
-
-// les users en dur pour tester (normalement ca vient du backend)
-const MOCK_USERS = [
-  { id: 1, email: 'admin@blog.com', password: 'admin123', name: 'Admin', role: 'admin' },
-  { id: 2, email: 'user@blog.com', password: 'user123', name: 'Jean Dupont', role: 'user' },
-  { id: 3, email: 'marie@blog.com', password: 'marie123', name: 'Marie Martin', role: 'user' },
-]
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)

@@ -7,6 +7,12 @@ export const TAGS = [
   { id: 5, name: 'TypeScript', color: 'bg-blue-700' },
   { id: 6, name: 'Tutoriel', color: 'bg-purple-500' },
 ]
+// les users en dur pour tester (normalement ca vient du backend)
+export const MOCK_USERS = [
+  { id: 1, email: 'admin@blog.com', password: 'admin123', name: 'Admin', role: 'admin' },
+  { id: 2, email: 'user@blog.com', password: 'user123', name: 'Jean Dupont', role: 'user' },
+  { id: 3, email: 'marie@blog.com', password: 'marie123', name: 'Marie Martin', role: 'user' },
+]
 
 // les emojis pour les reactions
 export const EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🎉']

@@ -96,7 +96,7 @@ function App() {
 
           <Route path="/login" element={<Login />} />
 
-          <Route path="/about" element={<About />} />
+          {/* <Route path="/about" element={<About />} /> */}
 
           {/* page detail avec l'id en parametre */}
           <Route
