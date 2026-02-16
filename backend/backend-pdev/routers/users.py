@@ -27,6 +27,12 @@ def get_user_by_id(user_id: int):
 def create_user(mail: str, pseudo: str, password: str, can_edit: bool): 
     conn = connect_db() 
     cursor = conn.cursor() 
+    query = "SELECT id_user FROM user WHERE mail = %s OR pseudo = %s"
+    cursor.execute(query, (mail, pseudo))
+    if cursor.fetchone():
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=400, detail="Email or pseudo already exists")
     query = "INSERT INTO user (mail, pseudo, password, can_edit) VALUES (%s, %s, %s, %s)" 
     cursor.execute(query, (mail, pseudo, password, can_edit))
     conn.commit() 
@@ -70,16 +76,10 @@ def read_user(user_id: int):
     if not user: 
         raise HTTPException(status_code=404, detail="User not found") 
     return user 
+@router.post("/") 
 def create_new_user(payload: UserCreate): 
-    conn = connect_db() 
-    cursor = conn.cursor() 
-    query = "INSERT INTO user (mail, pseudo, password, can_edit) VALUES (%s, %s, %s, %s)" 
-    cursor.execute(query, (payload.mail, payload.pseudo, payload.password, payload.can_edit)) 
-    conn.commit() 
-    user_id = cursor.lastrowid 
-    cursor.close() 
-    conn.close() 
-    return {"message": "User created", "user_id": user_id} 
+    user_id = create_user(payload.mail, payload.pseudo, payload.password, payload.can_edit) 
+    return {"id_user": user_id}
 @router.patch("/{user_id}") 
 def patch_user(user_id: int, payload: UserUpdate): 
     user = get_user_by_id(user_id) 
