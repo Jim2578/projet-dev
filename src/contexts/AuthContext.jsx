@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { MOCK_USERS } from '../data/mockData'
+// import { MOCK_USERS } from '../data/mockData'
+import { getUsers } from '../api/dataBridge'
+const MOCK_USERS = getUsers()
 
 const AuthContext = createContext(null)
 
