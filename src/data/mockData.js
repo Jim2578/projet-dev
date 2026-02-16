@@ -1,12 +1,12 @@
 // les tags pour les articles
-export const TAGS = [
-  { id: 1, name: 'React', color: 'bg-blue-500' },
-  { id: 2, name: 'JavaScript', color: 'bg-yellow-500' },
-  { id: 3, name: 'CSS', color: 'bg-pink-500' },
-  { id: 4, name: 'Node.js', color: 'bg-green-500' },
-  { id: 5, name: 'TypeScript', color: 'bg-blue-700' },
-  { id: 6, name: 'Tutoriel', color: 'bg-purple-500' },
-]
+// export const TAGS = [
+//   { id: 1, name: 'React', color: 'bg-blue-500' },
+//   { id: 2, name: 'JavaScript', color: 'bg-yellow-500' },
+//   { id: 3, name: 'CSS', color: 'bg-pink-500' },
+//   { id: 4, name: 'Node.js', color: 'bg-green-500' },
+//   { id: 5, name: 'TypeScript', color: 'bg-blue-700' },
+//   { id: 6, name: 'Tutoriel', color: 'bg-purple-500' },
+// ]
 // les users en dur pour tester (normalement ca vient du backend)
 export const MOCK_USERS = [
   { id: 1, email: 'admin@blog.com', password: 'admin123', name: 'Admin', role: 'admin' },
@@ -114,45 +114,45 @@ export const EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🎉']
 //   },
 // ]
 
-// les commentaires
-export const INITIAL_COMMENTS = [
-  // commentaires du post 1 (React 19)
-  { id: 1, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'Super article ! React 19 a l\'air vraiment prometteur.', createdAt: '2026-01-15T12:00:00Z' },
-  { id: 2, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Merci pour ces explications claires sur les nouvelles fonctionnalités.', createdAt: '2026-01-15T14:30:00Z' },
-  { id: 3, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'J\'ai hâte de tester le nouveau compilateur !', createdAt: '2026-01-16T09:00:00Z' },
-  { id: 4, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Les Server Components vont vraiment changer la donne.', createdAt: '2026-01-16T11:15:00Z' },
-  { id: 5, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'Est-ce que la migration depuis React 18 est compliquée ?', createdAt: '2026-01-17T08:00:00Z' },
-  { id: 6, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Je vais commencer à l\'utiliser sur mon prochain projet.', createdAt: '2026-01-17T15:45:00Z' },
-  // commentaires du post 2 (CSS)
-  { id: 7, postId: 2, userId: 2, userName: 'Jean Dupont', content: 'Container Queries, c\'est la révolution !', createdAt: '2026-01-20T16:00:00Z' },
-  { id: 8, postId: 2, userId: 3, userName: 'Marie Martin', content: 'Enfin le nesting natif, plus besoin de Sass juste pour ça.', createdAt: '2026-01-21T10:00:00Z' },
-  // commentaires du post 3 (Node.js)
-  { id: 9, postId: 3, userId: 3, userName: 'Marie Martin', content: 'Tutoriel très complet, merci !', createdAt: '2026-01-25T11:00:00Z' },
-  { id: 10, postId: 3, userId: 2, userName: 'Jean Dupont', content: 'La partie sur JWT est exactement ce que je cherchais.', createdAt: '2026-01-26T14:00:00Z' },
-  // commentaires du post 4 (TypeScript)
-  { id: 11, postId: 4, userId: 2, userName: 'Jean Dupont', content: 'Les mapped types sont vraiment puissants.', createdAt: '2026-01-29T09:00:00Z' },
-]
+// // les commentaires
+// export const INITIAL_COMMENTS = [
+//   // commentaires du post 1 (React 19)
+//   { id: 1, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'Super article ! React 19 a l\'air vraiment prometteur.', createdAt: '2026-01-15T12:00:00Z' },
+//   { id: 2, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Merci pour ces explications claires sur les nouvelles fonctionnalités.', createdAt: '2026-01-15T14:30:00Z' },
+//   { id: 3, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'J\'ai hâte de tester le nouveau compilateur !', createdAt: '2026-01-16T09:00:00Z' },
+//   { id: 4, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Les Server Components vont vraiment changer la donne.', createdAt: '2026-01-16T11:15:00Z' },
+//   { id: 5, postId: 1, userId: 2, userName: 'Jean Dupont', content: 'Est-ce que la migration depuis React 18 est compliquée ?', createdAt: '2026-01-17T08:00:00Z' },
+//   { id: 6, postId: 1, userId: 3, userName: 'Marie Martin', content: 'Je vais commencer à l\'utiliser sur mon prochain projet.', createdAt: '2026-01-17T15:45:00Z' },
+//   // commentaires du post 2 (CSS)
+//   { id: 7, postId: 2, userId: 2, userName: 'Jean Dupont', content: 'Container Queries, c\'est la révolution !', createdAt: '2026-01-20T16:00:00Z' },
+//   { id: 8, postId: 2, userId: 3, userName: 'Marie Martin', content: 'Enfin le nesting natif, plus besoin de Sass juste pour ça.', createdAt: '2026-01-21T10:00:00Z' },
+//   // commentaires du post 3 (Node.js)
+//   { id: 9, postId: 3, userId: 3, userName: 'Marie Martin', content: 'Tutoriel très complet, merci !', createdAt: '2026-01-25T11:00:00Z' },
+//   { id: 10, postId: 3, userId: 2, userName: 'Jean Dupont', content: 'La partie sur JWT est exactement ce que je cherchais.', createdAt: '2026-01-26T14:00:00Z' },
+//   // commentaires du post 4 (TypeScript)
+//   { id: 11, postId: 4, userId: 2, userName: 'Jean Dupont', content: 'Les mapped types sont vraiment puissants.', createdAt: '2026-01-29T09:00:00Z' },
+// ]
 
 // infos de l'auteur pour la page a propos
-export const AUTHOR_INFO = {
-  name: 'Alexandre Durand',
-  title: 'Développeur Full-Stack & Formateur',
-  bio: `Passionné de développement web depuis plus de 10 ans, je partage mes connaissances et découvertes à travers ce blog.
+// export const AUTHOR_INFO = {
+//   name: 'Alexandre Durand',
+//   title: 'Développeur Full-Stack & Formateur',
+//   bio: `Passionné de développement web depuis plus de 10 ans, je partage mes connaissances et découvertes à travers ce blog.
 
-Spécialisé dans l'écosystème JavaScript/TypeScript, je travaille quotidiennement avec React, Node.js et les technologies cloud modernes.
+// Spécialisé dans l'écosystème JavaScript/TypeScript, je travaille quotidiennement avec React, Node.js et les technologies cloud modernes.
 
-Mon objectif est de rendre le développement web accessible à tous, en expliquant les concepts complexes de manière simple et pratique.
+// Mon objectif est de rendre le développement web accessible à tous, en expliquant les concepts complexes de manière simple et pratique.
 
-Quand je ne code pas, vous me trouverez probablement en train de lire des articles tech, de contribuer à des projets open source, ou de préparer mes prochains cours.`,
-  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alexandre',
-  social: {
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    twitter: 'https://twitter.com',
-  },
-  stats: {
-    posts: 4,
-    comments: 50,
-    followers: 1234,
-  },
-}
+// Quand je ne code pas, vous me trouverez probablement en train de lire des articles tech, de contribuer à des projets open source, ou de préparer mes prochains cours.`,
+//   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alexandre',
+//   social: {
+//     github: 'https://github.com',
+//     linkedin: 'https://linkedin.com',
+//     twitter: 'https://twitter.com',
+//   },
+//   stats: {
+//     posts: 4,
+//     comments: 50,
+//     followers: 1234,
+//   },
+// }
