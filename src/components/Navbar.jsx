@@ -72,7 +72,7 @@ function Navbar() {
             {user ? (
               <div className="flex items-center gap-3">
                 <span className="text-sm text-gray-600 dark:text-gray-300">
-                  {user.name}
+                  {user.pseudo}
                   {isAdmin && (
                     <span className="ml-1 px-2 py-0.5 text-xs bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full">
                       Admin

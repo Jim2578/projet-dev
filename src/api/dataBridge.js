@@ -1,5 +1,14 @@
 import { api } from './apiClient';
 
+export function databridge() {
+  return {
+    getPosts,
+    getUsers,
+    getCommentsByPost,
+    addPost
+  }
+}
+
 export const getPosts = async () => {
   const res = await api.get('/posts/');
   return res.data;

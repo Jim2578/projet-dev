@@ -16,9 +16,6 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
   // on filtre les commentaires de ce post
   const postComments = comments.filter(c => c.postId === post.id)
 
-  // on recupere les tags du post
-  const postTags = TAGS.filter(tag => post.tags.includes(tag.id))
-
   // formater une date en francais
   function formatDate(dateStr) {
     const date = new Date(dateStr)
@@ -43,18 +40,6 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
     <>
       <article className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         <div className="p-6">
-          {/* les tags */}
-          <div className="flex flex-wrap gap-2 mb-3">
-            {postTags.map(tag => (
-              <span
-                key={tag.id}
-                className={`px-2 py-1 text-xs text-white rounded-full ${tag.color}`}
-              >
-                {tag.name}
-              </span>
-            ))}
-          </div>
-
           {/* titre */}
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
             {post.title}
@@ -67,7 +52,7 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
 
           {/* apercu du contenu (5 lignes max) */}
           <div className="text-gray-700 dark:text-gray-300 line-clamp-5 mb-4">
-            {post.content}
+            {post.text}
           </div>
 
           {/* bouton pour ouvrir la modale */}
@@ -104,19 +89,8 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
 
       {/* modale pour l'article complet */}
       <Modal isOpen={showModal} onClose={fermerModal} title={post.title}>
-        {/* tags dans la modale */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {postTags.map(tag => (
-            <span
-              key={tag.id}
-              className={`px-2 py-1 text-xs text-white rounded-full ${tag.color}`}
-            >
-              {tag.name}
-            </span>
-          ))}
-        </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          Par {post.author} - {formatDate(post.createdAt)}
+          Par {post.authorId} - {formatDate(post.createdAt)}
         </p>
         {/* contenu complet */}
         <div className="text-gray-700 dark:text-gray-300 whitespace-pre-line mb-6">

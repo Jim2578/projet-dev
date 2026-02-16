@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -8,13 +8,48 @@ import CreatePost from './pages/CreatePost'
 import PostDetail from './pages/PostDetail'
 import ProtectedRoute from './components/ProtectedRoute'
 import { INITIAL_POSTS, INITIAL_COMMENTS } from './data/mockData'
-
+import { getPosts, getCommentsByPost } from './api/dataBridge'
 // import Footer from './components/Footer' // TODO: creer un footer plus tard
 
 function App() {
   // les states principaux de l'appli
-  const [posts, setPosts] = useState(INITIAL_POSTS)
-  const [comments, setComments] = useState(INITIAL_COMMENTS)
+  const [posts, setPosts] = useState([])
+  const [comments, setComments] = useState([])
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const apiPosts = await getPosts()
+        const normalized = (apiPosts ?? []).map(p => ({
+          id: p.id_post,
+          title: p.title,
+          text: p.text,
+          reactions: p.reactions ?? {},
+          id_user: p.id_user ?? null,
+          createdAt: p.createdAt,
+          _loadingDetails: true, // indique que les infos détaillées sont en cours
+        }))
+
+        // afficher les posts immédiatement
+        setPosts(normalized)
+        // puis charger les commentaires pour chaque post
+        for (const post of normalized) {
+          const apiComments = await getCommentsByPost(post.id)
+          const postComments = (apiComments ?? []).map(c => ({
+            id: c.id_comment,
+            postId: c.id_post,
+            text: c.text,
+            id_user: c.id_user,
+            userName: c.pseudo,
+            createdAt: c.createdAt
+          }))
+          setComments(postComments)
+        }
+      } catch (e) {
+        console.error("Erreur getCommentsByPost:", e)
+      }
+    }
+load()}, [])
 
   // const [loading, setLoading] = useState(false) // pour plus tard quand on aura le backend
 

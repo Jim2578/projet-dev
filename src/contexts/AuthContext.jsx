@@ -1,7 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-// import { MOCK_USERS } from '../data/mockData'
-import { getUsers } from '../api/dataBridge'
-const MOCK_USERS = getUsers()
+import { login } from '../api/authService'
 
 const AuthContext = createContext(null)
 
@@ -21,32 +19,19 @@ export function AuthProvider({ children }) {
       }
     }
   }, [])
-
   // fonction de login
-  const login = (email, password) => {
-    // on cherche si l'user existe dans notre liste
-    const foundUser = MOCK_USERS.find(
-      u => u.email === email && u.password === password
-    )
-
-    if (foundUser) {
-      // on enleve le mdp avant de stocker (securite)
-      const userData = {
-        id: foundUser.id,
-        email: foundUser.email,
-        name: foundUser.name,
-        role: foundUser.role
-      }
-      setUser(userData)
-      localStorage.setItem('blogaura_user', JSON.stringify(userData))
-      console.log("connexion reussie:", userData.name)
-      return { success: true }
+  const Connect = async (mail, password) => {
+    try {
+    const data = await login(mail, password)
+    setUser(data.user)
+    localStorage.setItem('blogaura_user', JSON.stringify(data.user))
+    console.log("connexion reussie:", data.user.pseudo)
+    return { success: true }
+    } catch (e) {
+      console.log("echec connexion pour:", mail, e)
+      return { success: false, error: 'Email ou mot de passe incorrect' }
     }
-
-    console.log("echec connexion pour:", email)
-    return { success: false, error: 'Email ou mot de passe incorrect' }
   }
-
   // deconnexion
   const logout = () => {
     setUser(null)
@@ -55,16 +40,14 @@ export function AuthProvider({ children }) {
   }
 
   // verif si admin
-  let isAdmin = false
-  if (user !== null && user.role === 'admin') {
-    isAdmin = true
-  }
-
+  console.log("user info:", user)
+  const isAdmin = (String(user?.can_edit) === "1" || user?.can_edit === true)
   // verif si connecte
   const isAuthenticated = user !== null
 
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, login: Connect, logout, isAdmin, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   )

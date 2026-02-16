@@ -5,7 +5,8 @@ router = APIRouter()
 def get_comments_by_post_id(post_id: int): 
     conn = connect_db() 
     cursor = conn.cursor(dictionary=True) 
-    query = "SELECT id_user, id_post, text FROM comment WHERE id_post = %s" 
+    query = "SELECT id_comment, comment.id_user, id_post, text, createdAt, pseudo FROM comment " \
+    "JOIN user ON comment.id_user = user.id_user WHERE id_post = %s" 
     cursor.execute(query, (post_id,)) 
     result = cursor.fetchall() 
     cursor.close() 

@@ -5,7 +5,6 @@ function CommentSection({ comments, onAddComment, maxComments = 5, showPaginatio
   const { isAuthenticated } = useAuth()
   const [newComment, setNewComment] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-
   // calcul pagination
   const totalPages = Math.ceil(comments.length / maxComments)
 
@@ -106,7 +105,7 @@ function CommentSection({ comments, onAddComment, maxComments = 5, showPaginatio
                 </span>
               </div>
               <p className="text-gray-700 dark:text-gray-300 text-sm">
-                {comment.content}
+                {comment.text}
               </p>
             </div>
           ))

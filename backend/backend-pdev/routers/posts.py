@@ -6,7 +6,7 @@ router = APIRouter()
 def get_all_posts():
     conn = connect_db() 
     cursor = conn.cursor(dictionary=True) 
-    query = "SELECT post.id_post, post.title, post.text, user.id_user, user.pseudo AS author_name " \
+    query = "SELECT post.id_post, post.title, post.text, user.id_user, user.pseudo AS author_name, post.createdAt " \
             "FROM post JOIN user ON post.authorid = user.id_user" 
     cursor.execute(query) 
     result = cursor.fetchall() 
