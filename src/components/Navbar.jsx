@@ -41,14 +41,14 @@ function Navbar() {
             </Link> */}
 
             {/* lien nouveau post visible que pour les admins */}
-            {isAdmin && (
+            {/* {isAdmin && (
               <Link
                 to="/create"
                 className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Nouveau Post
               </Link>
-            )}
+            )} */}
 
             {/* bouton dark mode */}
             <button

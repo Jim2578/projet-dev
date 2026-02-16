@@ -9,29 +9,6 @@ function CreatePost({ onAddPost }) {
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [selectedTags, setSelectedTags] = useState([])
-
-  // ajouter ou retirer un tag
-  function handleTagToggle(tagId) {
-    if (selectedTags.includes(tagId)) {
-      // le tag est deja la, on le retire
-      const newTags = selectedTags.filter(id => id !== tagId)
-      setSelectedTags(newTags)
-    } else {
-      // on ajoute le tag
-      setSelectedTags([...selectedTags, tagId])
-    }
-  }
-
-  /* version courte (meme chose):
-  function handleTagToggle(tagId) {
-    setSelectedTags(prev =>
-      prev.includes(tagId)
-        ? prev.filter(id => id !== tagId)
-        : [...prev, tagId]
-    )
-  }
-  */
 
   // quand on publie l'article
   function handleSubmit(e) {
@@ -44,17 +21,15 @@ function CreatePost({ onAddPost }) {
     }
 
     const nouveauPost = {
-      title: title.trim(),
+      text: title.trim(),
       content: content.trim(),
-      author: user.name,
-      authorId: user.id,
+      id_user: user.id,
       createdAt: new Date().toISOString(),
-      tags: selectedTags,
       reactions: {} // vide au debut
     }
 
     onAddPost(nouveauPost)
-    console.log("article publié:", nouveauPost.title)
+    console.log("article publié:", nouveauPost.text)
     navigate('/') // retour a l'accueil
   }
 
@@ -79,29 +54,6 @@ function CreatePost({ onAddPost }) {
               placeholder="Titre de votre article"
               required
             />
-          </div>
-
-          {/* selection des tags */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Tags
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {TAGS.map(tag => (
-                <button
-                  key={tag.id}
-                  type="button"
-                  onClick={() => handleTagToggle(tag.id)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                    selectedTags.includes(tag.id)
-                      ? `${tag.color} text-white`
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                  }`}
-                >
-                  {tag.name}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* contenu */}

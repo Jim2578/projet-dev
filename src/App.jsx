@@ -64,12 +64,13 @@ load()}, [])
     // console.log("post ajouté: ", postAvecId)
   }
 
-  // ajouter un commentaire
   function addComment(postId, comment) {
+    console.log("ajout commentaire:", comment)
     const nouveauCommentaire = {
       ...comment,
       id: Date.now(),
-      postId: postId
+      postId: postId,
+      userId: comment.userId,
     }
     setComments(prev => [...prev, nouveauCommentaire])
   }

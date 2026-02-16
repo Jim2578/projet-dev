@@ -40,7 +40,6 @@ export function AuthProvider({ children }) {
   }
 
   // verif si admin
-  console.log("user info:", user)
   const isAdmin = (String(user?.can_edit) === "1" || user?.can_edit === true)
   // verif si connecte
   const isAuthenticated = user !== null

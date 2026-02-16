@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { addComment } from '../api/dataBridge'
 
 function CommentSection({ comments, onAddComment, maxComments = 5, showPagination = false, showAll = false }) {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const [newComment, setNewComment] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   // calcul pagination
@@ -19,7 +20,7 @@ function CommentSection({ comments, onAddComment, maxComments = 5, showPaginatio
   }
 
   // quand on envoie un commentaire
-  function handleSubmit(e) {
+ function handleSubmit(e) {
     e.preventDefault()
     if (newComment.trim() && isAuthenticated) {
       onAddComment(newComment.trim())

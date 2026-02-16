@@ -5,6 +5,7 @@ export function databridge() {
     getPosts,
     getUsers,
     getCommentsByPost,
+    addComment,
     addPost
   }
 }
@@ -21,6 +22,12 @@ export const getUsers = async () => {
 
 export const getCommentsByPost = async (postId) => {
   const res = await api.get(`/comments/${postId}`);
+  return res.data;
+};
+export const addComment = async (postId, text) => {
+  const res = await api.post(`/comments/${postId}`, null, {
+    params: { text }
+  });
   return res.data;
 };
 

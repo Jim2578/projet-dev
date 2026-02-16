@@ -74,10 +74,10 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
             <CommentSection
               comments={postComments}
-              onAddComment={(content) => onAddComment(post.id, {
-                userId: user.id,
-                userName: user.name,
-                content,
+              onAddComment={(text) => onAddComment(post.id, {
+                id_user: user.id_user,
+                userName: user.pseudo,
+                text,
                 createdAt: new Date().toISOString(),
               })}
               maxComments={5}
@@ -90,7 +90,7 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
       {/* modale pour l'article complet */}
       <Modal isOpen={showModal} onClose={fermerModal} title={post.title}>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          Par {post.authorId} - {formatDate(post.createdAt)}
+          Par {post.userName} - {formatDate(post.createdAt)}
         </p>
         {/* contenu complet */}
         <div className="text-gray-700 dark:text-gray-300 whitespace-pre-line mb-6">
@@ -107,11 +107,8 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
         <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
           <CommentSection
             comments={postComments}
-            onAddComment={(content) => onAddComment(post.id, {
-              userId: user.id,
-              userName: user.name,
-              content,
-              createdAt: new Date().toISOString(),
+            onAddComment={(text) => onAddComment(post.id, {
+              text
             })}
             showAll
           />
