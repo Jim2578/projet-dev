@@ -39,4 +39,4 @@ Ouvrir http://localhost:5173
 
 ## Documentation
 
-Voir le fichier `Documentation_Frontend_BlogAura.pdf` pour la documentation complète.
+Voir le fichier `Documentation_Frontend_BlogAura.md` pour la documentation complète.
