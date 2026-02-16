@@ -1,18 +1,10 @@
-from fastapi import FastAPI, HTTPException 
+from urllib import request
+from fastapi import APIRouter, FastAPI, HTTPException, Request, Request 
 from models import LoginPayload
-import mysql.connector 
-app = FastAPI() 
-def connect_db(): 
-    return mysql.connector.connect( 
-        # host="62.210.144.234", # 
-        # user="projet_dev", 
-        # base de donnée prod (connection bloqué sur mon pc) 
-        # password="projet_dev", 
-        host="localhost", 
-        user="root", 
-        database="projet_dev", 
-        connection_timeout=5 
-    ) 
+from db import connect_db
+
+router = APIRouter()
+
 def ConnectUser(mail: str, password: str): 
     conn = connect_db() 
     cursor = conn.cursor(dictionary=True) 
@@ -21,23 +13,31 @@ def ConnectUser(mail: str, password: str):
     result = cursor.fetchone() 
     cursor.close() 
     conn.close() 
-    return result 
+    return result
+
 def LogOutUser(): 
     return True 
-# routes 
-@app.get("/") 
-def read_root(): 
-    return {"message": "API is running", "db_status": "connected" if connect_db() else "not connected", "version": "26.15.02"} 
+# récup info user connecté
+@router.get("/me")
+def me(request: Request):
+    user = request.session.get("user")
+    if not user: raise HTTPException(status_code=401, detail="Not logged in")
+    return user
 # connection 
-@app.post("/login") 
-def login(payload: LoginPayload): 
+@router.post("/login")
+def login(payload: LoginPayload, request: Request):
     user = ConnectUser(payload.mail, payload.password) 
-    if user: 
-        return {"message": "Login successful", "user": user} 
-    raise HTTPException(status_code=401, detail="Invalid mail or password") 
+    if not user: raise HTTPException(status_code=401, detail={"message": "Invalid credentials", "success": False}) 
+    request.session["user"] = {
+        "id_user": user["id_user"], 
+        "mail": user["mail"], 
+        "pseudo": user["pseudo"],
+        "can_edit": user["can_edit"]
+    }
+    return {"message": "Login successful", "user": user, "success": True} 
 # déconnexion 
-@app.post("/logout") 
+@router.post("/logout") 
 def logout(): 
     if LogOutUser(): 
-        return {"message": "Logout successful"} 
-    raise HTTPException(status_code=400, detail="Logout failed")
+        return {"message": "Logout successful", "success": True} 
+    raise HTTPException(status_code=400, detail={"message": "Logout failed", "success": False})
