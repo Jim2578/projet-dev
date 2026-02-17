@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 import CreatePost from './pages/CreatePost'
 import PostDetail from './pages/PostDetail'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -129,6 +130,8 @@ load()}, [])
           />
 
           <Route path="/login" element={<Login />} />
+
+          <Route path="/signup" element={<Signup />} />
 
           {/* page detail avec l'id en parametre */}
           <Route
