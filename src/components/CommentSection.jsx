@@ -21,7 +21,6 @@ function CommentSection({ comments, onAddComment, maxComments = 5, showPaginatio
   // quand on envoie un commentaire
  async function handleSubmit(e) {
     e.preventDefault()
-    console.log(e)
     if (newComment.trim() && isAuthenticated) {
       onAddComment(newComment.trim())
       setNewComment('') // on vide le champ

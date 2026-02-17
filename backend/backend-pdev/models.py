@@ -21,3 +21,8 @@ class CommentCreate(BaseModel):
 
 class ReactCreate(BaseModel):
     emoji: str
+
+class PostCreate(BaseModel):
+    title: str
+    text: str
+    user_id: int

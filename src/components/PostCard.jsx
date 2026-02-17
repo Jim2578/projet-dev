@@ -11,7 +11,6 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
 
   // on recupere l'id du user connecte (ou null)
   const userId = user ? user.id : null
-
   // on filtre les commentaires de ce post
   const postComments = comments.filter(c => c.postId === post.id)
 
@@ -46,7 +45,7 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
 
           {/* auteur + date */}
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-            Par {post.author} - {formatDate(post.createdAt)}
+            Par {post.author_name} - {formatDate(post.createdAt)}
           </p>
 
           {/* apercu du contenu (5 lignes max) */}
@@ -89,7 +88,7 @@ function PostCard({ post, comments, onToggleReaction, onAddComment }) {
       {/* modale pour l'article complet */}
       <Modal isOpen={showModal} onClose={fermerModal} title={post.title}>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          Par {post.userName} - {formatDate(post.createdAt)}
+          Par {post.author_name} - {formatDate(post.createdAt)}
         </p>
         {/* contenu complet */}
         <div className="text-gray-700 dark:text-gray-300 whitespace-pre-line mb-6">

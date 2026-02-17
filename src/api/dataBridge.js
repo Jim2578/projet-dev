@@ -30,9 +30,7 @@ export const addComment = async (postId, text) => {
 };
 
 export const addPost = async (title, text, userId) => {
-  const res = await api.post('/posts/', null, {
-    params: { title, text, userId } 
-  });
+  const res = await api.post('/posts/', { "title": title, "text": text, "user_id": userId });
   return res.data;
 };
 

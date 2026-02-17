@@ -1,5 +1,6 @@
 from db import connect_db 
 from fastapi import APIRouter, HTTPException, Request 
+from models import PostCreate
 
 router = APIRouter()
 
@@ -7,7 +8,7 @@ def get_all_posts():
     conn = connect_db() 
     cursor = conn.cursor(dictionary=True) 
     query = "SELECT post.id_post, post.title, post.text, user.id_user, user.pseudo AS author_name, post.createdAt " \
-            "FROM post JOIN user ON post.authorid = user.id_user" 
+            "FROM post JOIN user ON post.authorid = user.id_user ORDER BY post.createdAt DESC"
     cursor.execute(query) 
     result = cursor.fetchall() 
 
@@ -97,8 +98,8 @@ def read_post(post_id: int):
     raise HTTPException(status_code=404, detail="Post not found")
 
 @router.post("/")
-def add_post(title: str, text: str):
-    post_id = create_post(title, text) 
+def add_post(request: Request, post_create: PostCreate):
+    post_id = create_post(post_create.title, post_create.text, post_create.user_id) 
     return {"message": "Post created", "id_post": post_id}
 
 @router.patch("/{post_id}")

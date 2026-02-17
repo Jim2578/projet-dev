@@ -7,7 +7,7 @@ import Signup from './pages/Signup'
 import CreatePost from './pages/CreatePost'
 import PostDetail from './pages/PostDetail'
 import ProtectedRoute from './components/ProtectedRoute'
-import { getPosts, getCommentsByPost, addComment, addReact, removeReact } from './api/dataBridge'
+import { getPosts, getCommentsByPost, addPost, addComment, addReact, removeReact } from './api/dataBridge'
 import { getMe } from './api/authService'
 
 const user = await getMe() // on peut aussi le stocker dans un context pour le rendre accessible partout
@@ -51,21 +51,17 @@ function App() {
       }
     }
 load()}, [])
-
-  // const [loading, setLoading] = useState(false) // pour plus tard quand on aura le backend
-
   // ajouter un nouveau post
-  function addPost(newPost) {
+  async function NewPost(newPost) {
     // on genere un id unique avec Date.now() et on met le post au debut
     const postAvecId = {
       ...newPost,
       id: Date.now()
     }
+    await addPost(newPost.text, newPost.content, user.id_user)
     setPosts(prev => [postAvecId, ...prev])
-    // console.log("post ajouté: ", postAvecId)
   }
   async function AddComment(postId, comment) {
-    console.log("ajout commentaire:", comment)
     const nouveauCommentaire = {
       ...comment,
       id: Date.now(),
@@ -81,11 +77,11 @@ load()}, [])
 async function toggleReaction(postId, emoji) {
   const userId = user?.id_user
   if (!userId) return
-
-  // 1) Déterminer l’ancienne réaction du user sur ce post (dans l’état actuel)
+  // anciennes reactions du post
   const post = posts.find(p => p.id === postId)
   if (!post) return
   const reactions = post.reactions ?? {}
+
   let oldEmoji = null
   for (const [e, ids] of Object.entries(reactions)) {
     if ((ids ?? []).includes(userId)) {
@@ -93,18 +89,12 @@ async function toggleReaction(postId, emoji) {
       break
     }
   }
-
-  // action côté API :
-  // - si on clique le même emoji -> remove
-  // - sinon -> add (ça remplace l’ancienne en DB)
   const action = oldEmoji === emoji ? "remove" : "add"
-  console.log(action)
-  // 2) UI optimiste : 1 seule réaction par user
+  // une seule réaction par user
   setPosts(prev =>
     prev.map(p => {
       if (p.id !== postId) return p
       const next = { ...(p.reactions ?? {}) }
-      // enlever le user de l'ancien emoji (si existant)
       if (oldEmoji && next[oldEmoji]) {
         const filtered = next[oldEmoji].filter(id => id !== userId)
         if (filtered.length === 0) delete next[oldEmoji]
@@ -113,22 +103,15 @@ async function toggleReaction(postId, emoji) {
       if (action === "add") {
         const current = next[emoji] ?? []
         if (!current.includes(userId)) next[emoji] = [...current, userId]
-      } else {
-        // action === "remove" : on ne remet rien
-      }
+      } // pas besoin de faire d'autre modif pour "remove" car on a déjà enlevé l'user de l'ancien emoji
       return { ...p, reactions: next }
     })
   )
-  // 3) Synchro DB
     if (action === "add") {
-      // upsert => remplace l’ancienne réaction en DB
       if(oldEmoji) await removeReact(postId, oldEmoji)
       await addReact(postId, emoji)
-    } else {
-      await removeReact(postId, emoji)
-    }
+    } else { await removeReact(postId, emoji) }
   }
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       <Navbar />
@@ -170,7 +153,7 @@ async function toggleReaction(postId, emoji) {
             path="/create"
             element={
               <ProtectedRoute requireAdmin>
-                <CreatePost onAddPost={addPost} />
+                <CreatePost onAddPost={NewPost} />
               </ProtectedRoute>
             }
           />
