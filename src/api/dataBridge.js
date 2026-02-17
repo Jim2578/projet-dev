@@ -37,11 +37,11 @@ export const addPost = async (title, text) => {
   return res.data;
 };
 
-export const addReact = async (postId, emoji, userId) => {
-  const res = await api.post("/posts/${postId}/reactions", { emoji, userId });
+export const addReact = async (postId, emoji) => {
+  const res = await api.post(`/reacts/${postId}`, { emoji });
   return res.data;
 }
-export const removeReact = async (postId, emoji, userId) => {
-  const res = await api.delete("/posts/${postId}/reactions", { data: { emoji, userId } });
+export const removeReact = async (postId, emoji) => {
+  const res = await api.delete(`/reacts/${postId}`, { data: { emoji } });
   return res.data;
 }

@@ -6,7 +6,7 @@ function EmojiReactions({ reactions, onToggle, userId }) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {EMOJIS.map(emoji => {
+      {EMOJIS.map(emoji => { 
         // compter le nombre de reactions pour cet emoji
         let count = 0
         if (reactions[emoji]) {

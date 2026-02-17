@@ -18,3 +18,6 @@ class UserUpdate(BaseModel):
 
 class CommentCreate(BaseModel):
     text: str
+
+class ReactCreate(BaseModel):
+    emoji: str

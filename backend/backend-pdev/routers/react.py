@@ -1,5 +1,6 @@
 from db import connect_db 
 from fastapi import APIRouter, HTTPException, Request 
+from models import ReactCreate
 
 router = APIRouter()
 
@@ -29,13 +30,11 @@ def add_react(id_post: int, id_user: int, emoji: str):
     conn = connect_db() 
     cursor = conn.cursor() 
     # vérifier si la réaction existe déjà pour ce post et cet utilisateur
-    query_check = "SELECT id_react FROM react WHERE id_post = %s AND id_user = %s"
+    query_check = "SELECT idReact FROM react WHERE id_post = %s AND id_user = %s"
     cursor.execute(query_check, (id_post, id_user)) 
     existing = cursor.fetchone() 
     if existing:
-        # mettre à jour l'emoji
-        query_update = "UPDATE react SET emoji = %s WHERE id_react = %s"
-        cursor.execute(query_update, (emoji, existing[0])) 
+       return {"message": "Reaction already exists"}
     else:
         # insérer une nouvelle réaction
         query_insert = "INSERT INTO react (id_post, id_user, emoji) VALUES (%s, %s, %s)"
@@ -44,11 +43,16 @@ def add_react(id_post: int, id_user: int, emoji: str):
     cursor.close() 
     conn.close() 
     return {"message": "Reaction added/updated successfully"}
-def delete_react(id_post: int, id_user: int):
+def delete_react(id_post: int, id_user: int, emoji: str):
     conn = connect_db() 
     cursor = conn.cursor() 
-    query_delete = "DELETE FROM react WHERE id_post = %s AND id_user = %s"
-    cursor.execute(query_delete, (id_post, id_user)) 
+    # rechercher la réaction à supprimer
+    query_check = "SELECT idReact FROM react WHERE id_post = %s AND id_user = %s AND emoji = %s"
+    cursor.execute(query_check, (id_post, id_user, emoji))
+    existing = cursor.fetchone()
+    if not existing: return {"message": "Reaction does not exist"}
+    query_delete = "DELETE FROM react WHERE id_post = %s AND id_user = %s AND emoji = %s"
+    cursor.execute(query_delete, (id_post, id_user, emoji)) 
     conn.commit() 
     cursor.close() 
     conn.close() 
@@ -59,18 +63,19 @@ def read_react(id_post: int):
     return get_all_reacts(id_post)
 
 @router.post("/{id_post}")
-def add_react(id_post: int, request: Request):
-    data = request.json() 
-    id_user = data.get("id_user") 
-    emoji = data.get("emoji") 
+def ajout_react(id_post: int, payload: ReactCreate, request: Request):
+    # return id_post, payload.emoji, request.session['user']['id_user']
+    id_user = str(request.session["user"]["id_user"]) 
+    emoji = payload.emoji
     if not id_user or not emoji:
         raise HTTPException(status_code=400, detail="Missing id_user or emoji")
     return add_react(id_post, id_user, emoji)
 
 @router.delete("/{id_post}")
-def remove_react(id_post: int, request: Request):
-    data = request.json() 
-    id_user = data.get("id_user") 
-    if not id_user:
-        raise HTTPException(status_code=400, detail="Missing id_user")
-    return delete_react(id_post, id_user)
+def remove_react(id_post: int, payload: ReactCreate, request: Request):
+    # return id_post, payload.emoji, request.session['user']['id_user']
+    id_user = str(request.session["user"]["id_user"]) 
+    emoji = payload.emoji
+    if not id_user or not emoji:
+        raise HTTPException(status_code=400, detail="Missing id_user or emoji")
+    return delete_react(id_post, id_user, emoji)
