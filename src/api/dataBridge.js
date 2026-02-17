@@ -29,10 +29,9 @@ export const addComment = async (postId, text) => {
   return res.data;
 };
 
-export const addPost = async (title, text) => {
+export const addPost = async (title, text, userId) => {
   const res = await api.post('/posts/', null, {
-    // Ajout de l'id de l'utilisateur et du Date - Time a prevoir
-    params: { title, text } 
+    params: { title, text, userId } 
   });
   return res.data;
 };
