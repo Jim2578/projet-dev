@@ -41,7 +41,7 @@ function Home({ posts, comments, onToggleReaction, onAddComment }) {
       {filteredPosts.length === 0 && (
         <div className="text-center py-12">
           <p className="text-gray-500 dark:text-gray-400">
-            Aucun article trouvé pour ce tag.
+            Aucun posts trouvé.
           </p>
         </div>
       )}
