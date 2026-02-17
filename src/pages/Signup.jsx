@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-
+import { register } from '../api/authService'
 function Register() {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -9,7 +9,7 @@ function Register() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const { register } = useAuth() // On suppose que register existe dans ton context
+  // const { register } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -19,12 +19,13 @@ function Register() {
 
     // Appel à la fonction d'inscription
     const result = await register(username, email, password)
-    
-    if (result.success) {
+    console.log("resultat de la tentative d'inscription:", result)
+    if (result) {
       console.log("Compte créé avec succès")
       navigate('/')
     } else {
       setError(result.error || "Une erreur est survenue lors de l'inscription")
+      setLoading(false)
     }
     setLoading(false)
   }

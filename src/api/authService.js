@@ -16,5 +16,6 @@ export const getMe = async () => {
 
 
 export const register = async (pseudo, mail, password) => {
-  await api.post('/users', {mail: mail, pseudo: pseudo, password: password, can_edit: 0}) 
+  const { data } = await api.post('/users', {mail: mail, pseudo: pseudo, password: password, can_edit: 0});
+  return data;
 }
