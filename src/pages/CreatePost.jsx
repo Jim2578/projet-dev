@@ -20,8 +20,8 @@ function CreatePost({ onAddPost }) {
     }
 
     const nouveauPost = {
-      text: title.trim(),
-      content: content.trim(),
+      title: title.trim(),
+      text: content.trim(),
       id_user: user.id,
       createdAt: new Date().toISOString(),
       reactions: {} // vide au debut

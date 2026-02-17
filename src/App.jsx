@@ -58,7 +58,7 @@ load()}, [])
       ...newPost,
       id: Date.now()
     }
-    await addPost(newPost.text, newPost.content, user.id_user)
+    await addPost(newPost.title, newPost.text, user.id_user)
     setPosts(prev => [postAvecId, ...prev])
   }
   async function AddComment(postId, comment) {
