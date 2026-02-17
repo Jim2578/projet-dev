@@ -36,3 +36,12 @@ export const addPost = async (title, text) => {
   });
   return res.data;
 };
+
+export const addReact = async (postId, emoji, userId) => {
+  const res = await api.post("/posts/${postId}/reactions", { emoji, userId });
+  return res.data;
+}
+export const removeReact = async (postId, emoji, userId) => {
+  const res = await api.delete("/posts/${postId}/reactions", { data: { emoji, userId } });
+  return res.data;
+}
