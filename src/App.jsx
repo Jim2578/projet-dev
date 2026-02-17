@@ -81,40 +81,53 @@ load()}, [])
 async function toggleReaction(postId, emoji) {
   const userId = user?.id_user
   if (!userId) return
-  const users = (posts.reactions?.[emoji] ?? [])
-  let action = users.includes(userId) ? "remove" : "add"
 
+  // 1) Déterminer l’ancienne réaction du user sur ce post (dans l’état actuel)
+  const post = posts.find(p => p.id === postId)
+  if (!post) return
+  const reactions = post.reactions ?? {}
+  let oldEmoji = null
+  for (const [e, ids] of Object.entries(reactions)) {
+    if ((ids ?? []).includes(userId)) {
+      oldEmoji = e
+      break
+    }
+  }
+
+  // action côté API :
+  // - si on clique le même emoji -> remove
+  // - sinon -> add (ça remplace l’ancienne en DB)
+  const action = oldEmoji === emoji ? "remove" : "add"
+  console.log(action)
+  // 2) UI optimiste : 1 seule réaction par user
   setPosts(prev =>
-    prev.map(post => {
-      if (post.id !== postId) return post
-
-      const reactions = { ...(post.reactions ?? {}) }
-      const users = reactions[emoji] ?? []
-
-      if (users.includes(userId)) {
-        // REMOVE
-        const nextUsers = users.filter(id => id !== userId)
-        if (nextUsers.length === 0) delete reactions[emoji]
-        else reactions[emoji] = nextUsers
-        action = "remove"
-      } else {
-        // ADD
-        reactions[emoji] = [...users, userId]
-        action = "add"
+    prev.map(p => {
+      if (p.id !== postId) return p
+      const next = { ...(p.reactions ?? {}) }
+      // enlever le user de l'ancien emoji (si existant)
+      if (oldEmoji && next[oldEmoji]) {
+        const filtered = next[oldEmoji].filter(id => id !== userId)
+        if (filtered.length === 0) delete next[oldEmoji]
+        else next[oldEmoji] = filtered
       }
-
-      return { ...post, reactions }
+      if (action === "add") {
+        const current = next[emoji] ?? []
+        if (!current.includes(userId)) next[emoji] = [...current, userId]
+      } else {
+        // action === "remove" : on ne remet rien
+      }
+      return { ...p, reactions: next }
     })
   )
-
-  try {
-    if (action === "add") await addReact(postId, emoji)
-    if (action === "remove") await removeReact(postId, emoji)
-  } catch (e) {
-    console.error("Erreur toggleReaction:", e)
+  // 3) Synchro DB
+    if (action === "add") {
+      // upsert => remplace l’ancienne réaction en DB
+      if(oldEmoji) await removeReact(postId, oldEmoji)
+      await addReact(postId, emoji)
+    } else {
+      await removeReact(postId, emoji)
+    }
   }
-}
-
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
