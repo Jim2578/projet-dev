@@ -75,8 +75,17 @@ function Login() {
             Se connecter
           </button>
         </form>
-
-        {/* ... tes comptes de test ... */}
+        <div className="mt-6 text-center border-t border-gray-100 dark:border-gray-700 pt-6">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Pas encore de compte ?{' '}
+            <Link 
+              to="/signup" 
+              className="text-primary-600 hover:text-primary-700 font-semibold hover:underline transition-all"
+            >
+              Créer un compte
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
