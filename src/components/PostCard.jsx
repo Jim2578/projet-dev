@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { TAGS, EMOJIS } from '../data/mockData'
+import { EMOJIS } from '../data/mockData'
 import EmojiReactions from './EmojiReactions'
 import CommentSection from './CommentSection'
 import Modal from './Modal'

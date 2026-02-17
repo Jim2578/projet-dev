@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { TAGS } from '../data/mockData'
 import EmojiReactions from '../components/EmojiReactions'
 import CommentSection from '../components/CommentSection'
 
@@ -33,9 +32,8 @@ function PostDetail({ posts, comments, onToggleReaction, onAddComment }) {
     )
   }
 
-  // les commentaires et tags du post
+  // les commentaires du post
   const postComments = comments.filter(c => c.postId === post.id)
-  const postTags = TAGS.filter(tag => post.tags.includes(tag.id))
 
   // formater la date
   function formatDate(dateStr) {
@@ -61,17 +59,6 @@ function PostDetail({ posts, comments, onToggleReaction, onAddComment }) {
 
       <article className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
         <div className="p-8">
-          {/* tags */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            {postTags.map(tag => (
-              <span
-                key={tag.id}
-                className={`px-3 py-1 text-sm text-white rounded-full ${tag.color}`}
-              >
-                {tag.name}
-              </span>
-            ))}
-          </div>
 
           {/* titre */}
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">

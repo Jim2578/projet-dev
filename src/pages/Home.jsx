@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import PostCard from '../components/PostCard'
-import { TAGS } from '../data/mockData'
 
 function Home({ posts, comments, onToggleReaction, onAddComment }) {
   // le tag selectionne pour filtrer (null = tous)

@@ -3,11 +3,9 @@ import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
-import About from './pages/About'
 import CreatePost from './pages/CreatePost'
 import PostDetail from './pages/PostDetail'
 import ProtectedRoute from './components/ProtectedRoute'
-import { INITIAL_POSTS, INITIAL_COMMENTS } from './data/mockData'
 import { getPosts, getCommentsByPost } from './api/dataBridge'
 // import Footer from './components/Footer' // TODO: creer un footer plus tard
 
@@ -131,8 +129,6 @@ load()}, [])
           />
 
           <Route path="/login" element={<Login />} />
-
-          {/* <Route path="/about" element={<About />} /> */}
 
           {/* page detail avec l'id en parametre */}
           <Route
