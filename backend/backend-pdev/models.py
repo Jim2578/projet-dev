@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 
-
 class LoginPayload(BaseModel):
     mail: str
     password: str
@@ -16,3 +15,6 @@ class UserUpdate(BaseModel):
     pseudo: str | None = None
     password: str | None = None
     can_edit: bool | None = None
+
+class CommentCreate(BaseModel):
+    text: str

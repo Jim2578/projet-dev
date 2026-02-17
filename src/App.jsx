@@ -6,7 +6,7 @@ import Login from './pages/Login'
 import CreatePost from './pages/CreatePost'
 import PostDetail from './pages/PostDetail'
 import ProtectedRoute from './components/ProtectedRoute'
-import { getPosts, getCommentsByPost } from './api/dataBridge'
+import { getPosts, getCommentsByPost, addComment } from './api/dataBridge'
 // import Footer from './components/Footer' // TODO: creer un footer plus tard
 
 function App() {
@@ -61,8 +61,7 @@ load()}, [])
     setPosts(prev => [postAvecId, ...prev])
     // console.log("post ajouté: ", postAvecId)
   }
-
-  function addComment(postId, comment) {
+  async function AddComment(postId, comment) {
     console.log("ajout commentaire:", comment)
     const nouveauCommentaire = {
       ...comment,
@@ -70,6 +69,7 @@ load()}, [])
       postId: postId,
       userId: comment.userId,
     }
+    await addComment(postId, comment.text)
     setComments(prev => [...prev, nouveauCommentaire])
   }
 
@@ -123,7 +123,7 @@ load()}, [])
                 posts={posts}
                 comments={comments}
                 onToggleReaction={toggleReaction}
-                onAddComment={addComment}
+                onAddComment={AddComment}
               />
             }
           />
@@ -138,7 +138,7 @@ load()}, [])
                 posts={posts}
                 comments={comments}
                 onToggleReaction={toggleReaction}
-                onAddComment={addComment}
+                onAddComment={AddComment}
               />
             }
           />

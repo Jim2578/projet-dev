@@ -1,5 +1,6 @@
 from db import connect_db 
 from fastapi import APIRouter, HTTPException, Request 
+from models import CommentCreate
 
 router = APIRouter() 
 def get_comments_by_post_id(post_id: int): 
@@ -12,11 +13,11 @@ def get_comments_by_post_id(post_id: int):
     cursor.close() 
     conn.close() 
     return result 
-def create_comment(post_id: int, text: str): 
+def create_comment(post_id: int, text: str, user_id: int) -> int:
     conn = connect_db() 
     cursor = conn.cursor() 
-    query = "INSERT INTO comment (id_post, text) VALUES (%s, %s)" 
-    cursor.execute(query, (post_id, text)) 
+    query = "INSERT INTO comment (id_post, text, id_user) VALUES (%s, %s, %s)" 
+    cursor.execute(query, (post_id, text, user_id)) 
     conn.commit() 
     comment_id = cursor.lastrowid 
     cursor.close() 
@@ -46,13 +47,17 @@ def update_comment(comment_id: int, text: str) -> bool:
 @router.get("/{post_id}") 
 def read_comments(post_id: int): 
     return get_comments_by_post_id(post_id) 
-@router.post("/{post_id}") 
-def add_comment(post_id: int, text: str): 
-    comment_id = create_comment(post_id, text) 
-    return {"message": "Comment created", "id_comment": comment_id} 
-@router.put("/{comment_id}") 
-def modify_comment(comment_id: int, text: str): 
-    if update_comment(comment_id, text): 
+@router.post("/{post_id}")
+def add_comment(post_id: int, payload: CommentCreate, request: Request):
+    if not request.session.get("user"):
+        raise HTTPException(status_code=401, detail="Not logged in")
+    user_id = request.session["user"]["id_user"]
+    comment_id = create_comment(post_id, payload.text, user_id)
+    return {"message": "Comment created", "id_comment": comment_id}
+
+@router.patch("/{comment_id}") 
+def modify_comment(comment_id: int, payload: CommentCreate): 
+    if update_comment(comment_id, payload.text): 
         return {"message": "Comment updated"} 
     raise HTTPException(status_code=404, detail="Comment not found") 
 @router.delete("/{comment_id}") 

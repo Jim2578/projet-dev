@@ -25,9 +25,7 @@ export const getCommentsByPost = async (postId) => {
   return res.data;
 };
 export const addComment = async (postId, text) => {
-  const res = await api.post(`/comments/${postId}`, null, {
-    params: { text }
-  });
+  const res = await api.post(`/comments/${postId}`, { "text":text });
   return res.data;
 };
 

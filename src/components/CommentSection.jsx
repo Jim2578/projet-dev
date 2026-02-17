@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { addComment } from '../api/dataBridge'
 
 function CommentSection({ comments, onAddComment, maxComments = 5, showPagination = false, showAll = false }) {
   const { isAuthenticated, user } = useAuth()
@@ -20,8 +19,9 @@ function CommentSection({ comments, onAddComment, maxComments = 5, showPaginatio
   }
 
   // quand on envoie un commentaire
- function handleSubmit(e) {
+ async function handleSubmit(e) {
     e.preventDefault()
+    console.log(e)
     if (newComment.trim() && isAuthenticated) {
       onAddComment(newComment.trim())
       setNewComment('') // on vide le champ
