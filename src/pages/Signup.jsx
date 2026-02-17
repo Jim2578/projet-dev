@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
 import { register } from '../api/authService'
 function Register() {
   const [username, setUsername] = useState('')
@@ -9,7 +8,6 @@ function Register() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  // const { register } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
