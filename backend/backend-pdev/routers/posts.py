@@ -52,11 +52,11 @@ def get_post_by_id(post_id: int):
     conn.close() 
     return result
 
-def create_post(title: str, text: str):
+def create_post(title: str, text: str, user_id: int):
     conn = connect_db() 
     cursor = conn.cursor() 
-    query = "INSERT INTO post (title, text) VALUES (%s, %s)" 
-    cursor.execute(query, (title, text)) 
+    query = "INSERT INTO post (title, text, authorId) VALUES (%s, %s, %s)" 
+    cursor.execute(query, (title, text, user_id)) 
     conn.commit() 
     post_id = cursor.lastrowid 
     cursor.close() 
