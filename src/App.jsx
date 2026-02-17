@@ -7,8 +7,10 @@ import Signup from './pages/Signup'
 import CreatePost from './pages/CreatePost'
 import PostDetail from './pages/PostDetail'
 import ProtectedRoute from './components/ProtectedRoute'
-import { getPosts, getCommentsByPost, addComment } from './api/dataBridge'
-// import Footer from './components/Footer' // TODO: creer un footer plus tard
+import { getPosts, getCommentsByPost, addComment, addReact, removeReact } from './api/dataBridge'
+import { getMe } from './api/authService'
+
+const user = await getMe() // on peut aussi le stocker dans un context pour le rendre accessible partout
 
 function App() {
   // les states principaux de l'appli
@@ -76,39 +78,43 @@ load()}, [])
 
   // gerer les reactions emoji (toggle)
   // si l'user a deja reagit on retire, sinon on ajoute
-  function toggleReaction(postId, emoji, userId) {
-    setPosts(prev => {
-      const nouveauxPosts = prev.map(post => {
-        if (post.id !== postId) {
-          return post // pas le bon post, on touche pas
-        }
+async function toggleReaction(postId, emoji) {
+  const userId = user?.id_user
+  if (!userId) return
+  const users = (posts.reactions?.[emoji] ?? [])
+  let action = users.includes(userId) ? "remove" : "add"
 
-        // on copie les reactions pour pas modifier directement le state
-        const nouvellesReactions = { ...post.reactions }
+  setPosts(prev =>
+    prev.map(post => {
+      if (post.id !== postId) return post
 
-        // cas 1: l'emoji existe pas encore
-        if (!nouvellesReactions[emoji]) {
-          nouvellesReactions[emoji] = [userId]
-        }
-        // cas 2: l'user a deja reagit, on retire
-        else if (nouvellesReactions[emoji].includes(userId)) {
-          nouvellesReactions[emoji] = nouvellesReactions[emoji].filter(id => id !== userId)
-          // si plus personne on supprime l'emoji
-          if (nouvellesReactions[emoji].length === 0) {
-            delete nouvellesReactions[emoji]
-          }
-        }
-        // cas 3: l'user a pas encore reagit, on ajoute
-        else {
-          nouvellesReactions[emoji] = [...nouvellesReactions[emoji], userId]
-        }
+      const reactions = { ...(post.reactions ?? {}) }
+      const users = reactions[emoji] ?? []
 
-        return { ...post, reactions: nouvellesReactions }
-      })
+      if (users.includes(userId)) {
+        // REMOVE
+        const nextUsers = users.filter(id => id !== userId)
+        if (nextUsers.length === 0) delete reactions[emoji]
+        else reactions[emoji] = nextUsers
+        action = "remove"
+      } else {
+        // ADD
+        reactions[emoji] = [...users, userId]
+        action = "add"
+      }
 
-      return nouveauxPosts
+      return { ...post, reactions }
     })
+  )
+
+  try {
+    if (action === "add") await addReact(postId, emoji)
+    if (action === "remove") await removeReact(postId, emoji)
+  } catch (e) {
+    console.error("Erreur toggleReaction:", e)
   }
+}
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
