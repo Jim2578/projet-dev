@@ -48,11 +48,11 @@ def update_comment(comment_id: int, text: str) -> bool:
 def read_comments(post_id: int): 
     return get_comments_by_post_id(post_id) 
 @router.post("/{post_id}")
-def add_comment(post_id: int, payload: CommentCreate, request: Request):
+def add_comment(post_id: int, comment_create: CommentCreate, request: Request):
     if not request.session.get("user"):
         raise HTTPException(status_code=401, detail="Not logged in")
     user_id = request.session["user"]["id_user"]
-    comment_id = create_comment(post_id, payload.text, user_id)
+    comment_id = create_comment(post_id, comment_create.text, user_id)
     return {"message": "Comment created", "id_comment": comment_id}
 
 @router.patch("/{comment_id}") 

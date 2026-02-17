@@ -9,7 +9,7 @@ import './index.css'
 // on rend l'appli dans la div root du index.html
 // les providers c'est pour que les composants enfants puissent acceder aux donnees
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')).render(
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
-  </StrictMode>,
+  // </StrictMode>,
 )
 
 // note: l'ordre des providers est important

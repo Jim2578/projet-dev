@@ -31,7 +31,6 @@ function PostDetail({ posts, comments, onToggleReaction, onAddComment }) {
       </div>
     )
   }
-
   // les commentaires du post
   const postComments = comments.filter(c => c.postId === post.id)
 

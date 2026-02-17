@@ -44,7 +44,7 @@ function App() {
             userName: c.pseudo,
             createdAt: c.createdAt
           }))
-          setComments(postComments)
+          setComments(prev => [...prev, ...postComments])
         }
       } catch (e) {
         console.error("Erreur getCommentsByPost:", e)
@@ -54,14 +54,15 @@ load()}, [])
   // ajouter un nouveau post
   async function NewPost(newPost) {
     // on genere un id unique avec Date.now() et on met le post au debut
+    const response = await addPost(newPost.title, newPost.text, user.id_user)
     const postAvecId = {
       ...newPost,
-      id: Date.now()
+      id: response.id_post
     }
-    await addPost(newPost.title, newPost.text, user.id_user)
+    
     setPosts(prev => [postAvecId, ...prev])
   }
-  async function AddComment(postId, comment) {
+  async function NewComment(postId, comment) {
     const nouveauCommentaire = {
       ...comment,
       id: Date.now(),
@@ -126,7 +127,7 @@ async function toggleReaction(postId, emoji) {
                 posts={posts}
                 comments={comments}
                 onToggleReaction={toggleReaction}
-                onAddComment={AddComment}
+                onAddComment={NewComment}
               />
             }
           />
@@ -143,7 +144,7 @@ async function toggleReaction(postId, emoji) {
                 posts={posts}
                 comments={comments}
                 onToggleReaction={toggleReaction}
-                onAddComment={AddComment}
+                onAddComment={NewComment}
               />
             }
           />
